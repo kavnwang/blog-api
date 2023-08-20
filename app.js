@@ -1,11 +1,17 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const dotenv = require('dotenv');
+const router = require("./routes/api");
+const path = require('path');
+
 
 const app = express();
+/*
 
 app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "pug");
+app.set("view engine", "pug"); */
 
+app.use("/", router);
 
 mongoose.set("strictQuery",false);
 const mongoDB = process.env.DB_URL;

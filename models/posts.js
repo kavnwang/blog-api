@@ -1,14 +1,3 @@
-/*
-name
-date
-title
-text
-imgs
-id
-tags
-postviews
-*/
-
 const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
@@ -54,6 +43,11 @@ const postSchema = new Schema({
         type: [Schema.Types.ObjectId],
         ref: 'Image',
         default:[]
+    },
+    publish: {
+        type:Boolean,
+        required:true,
+        default:false
     }
 });
 
