@@ -1,0 +1,8 @@
+node_modules
+package-lock.json
+package.json
+LICENSE
+.gitignore
+README.md
+.eslintrc.json
+.prettierignore
