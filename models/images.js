@@ -7,10 +7,14 @@ const imageSchema = new Schema({
         type:String,
         minLength:1
     },
-    timeStamp: {
+    date: {
         type:Date,
         required:true,
         default: Date.now
+    },
+    month: {
+        type:Month,
+        required:true
     },
     url: {
         type: String,

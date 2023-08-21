@@ -1,8 +1,10 @@
+const { body, validationResult } = require("express-validator");
+
 const Month = require("../models/months");
 const asyncHandler = require("express-async-handler");
 
 //view posts with a tag
-exports.get_month_list = asyncHandler(async(req,res,next) => {
+exports.months_get = asyncHandler(async(req,res,next) => {
     const monthList = await Month.find({})
         .sort({date: -1})
         .exec();
@@ -12,7 +14,7 @@ exports.get_month_list = asyncHandler(async(req,res,next) => {
         });
 });
 
-exports.get_month_posts = asyncHandler(async(req,res,next) => {
+exports.month_get = asyncHandler(async(req,res,next) => {
 
     const selectedPosts = await Post.find({
         year: req.params.year,

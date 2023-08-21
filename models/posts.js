@@ -21,12 +21,7 @@ const postSchema = new Schema({
     },
     month: {
         type:Month,
-        required:true
-    },
-    user: {
-        type:String,
-        reqiured:true,
-        default: "Visitor"
+        //required:true
     },
     comments: {
         type: [Schema.Types.ObjectId], 

@@ -1,18 +1,20 @@
+const { body, validationResult } = require("express-validator");
 const Post = require("../models/posts");
 const asyncHandler = require("express-async-handler");
 
 //create a post
-exports.get_post_create = asyncHandler(async(req,res,next) => {
 
-});
+exports.post_create = asyncHandler(async(req,res,next) => {
+    const post = new Post({
 
-exports.post_post_create = asyncHandler(async(req,res,next) => {
-
+    })
+    await post.save();
+    res.redirect(post.url);
 });
 
 //view all posts
 
-exports.get_post_view_recent = asyncHandler(async(req,res,next) => {
+exports.posts_get_recent = asyncHandler(async(req,res,next) => {
     const postList = await Post.find({})
     .sort({date: -1})
     .limit(req.params.num)
@@ -24,7 +26,7 @@ exports.get_post_view_recent = asyncHandler(async(req,res,next) => {
 
 });
 
-exports.get_post_view_popular = asyncHandler(async(req,res,next) => {
+exports.posts_get_popular = asyncHandler(async(req,res,next) => {
     const postList = await Post.find({})
     .sort({views: -1})
     .limit(req.params.num)
@@ -35,7 +37,7 @@ exports.get_post_view_popular = asyncHandler(async(req,res,next) => {
     });
 });
 
-exports.get_post_view_title = asyncHandler(async(req,res,next) => {
+exports.posts_get_title = asyncHandler(async(req,res,next) => {
     const postList = await Post.find({
         "title": {$regex:req.params.title}
     })
@@ -47,7 +49,7 @@ exports.get_post_view_title = asyncHandler(async(req,res,next) => {
     });
 });
 
-exports.get_post_view_publish = asyncHandler(async(req,res,next) => {
+exports.posts_get_publish = asyncHandler(async(req,res,next) => {
     const postList = await Post.find({
         publish:true
     })
@@ -60,7 +62,7 @@ exports.get_post_view_publish = asyncHandler(async(req,res,next) => {
     });
 });
 
-exports.get_post_view_unpublish = asyncHandler(async(req,res,next) => {
+exports.posts_get_unpublish = asyncHandler(async(req,res,next) => {
     const postList = await Post.find({
         publish:false
     })
@@ -73,42 +75,32 @@ exports.get_post_view_unpublish = asyncHandler(async(req,res,next) => {
     });
 });
 
-exports.post_post_view_id = asyncHandler(async(req,res,next) => {
-
+exports.post_get = asyncHandler(async(req,res,next) => {
+    const post = await Post.findbyId(req.params.postId)
+    .populate()
+    .exec();
+    res.json({
+        posts:postList,
+        success:true
+    });
 });
 
 //Update post
-
-exports.get_post_update_id = asyncHandler(async(req,res,next) => {
-
-});
-
-exports.get_post_update_id_publish = asyncHandler(async(req,res,next) => {
+exports.post_update = asyncHandler(async(req,res,next) => {
 
 });
 
-exports.get_post_update_id_unpublish = asyncHandler(async(req,res,next) => {
+exports.post_publish = asyncHandler(async(req,res,next) => {
 
 });
 
-exports.post_post_update_id = asyncHandler(async(req,res,next) => {
-
-});
-
-exports.post_post_update_id_publish = asyncHandler(async(req,res,next) => {
-
-});
-
-exports.post_post_update_id_unpublish = asyncHandler(async(req,res,next) => {
+exports.post_unpublish = asyncHandler(async(req,res,next) => {
 
 });
 
 //Delete post
 
-exports.get_post_delete = asyncHandler(async(req,res,next) => {
 
-});
-
-exports.post_post_delete = asyncHandler(async(req,res,next) => {
+exports.post_delete = asyncHandler(async(req,res,next) => {
 
 });
