@@ -12,7 +12,7 @@ const commentSchema = new Schema({
         required:true,
         minLength:1
     },
-    timeStamp: {
+    date: {
         type:Date,
         required:true,
         default: Date.now

@@ -14,10 +14,14 @@ const postSchema = new Schema({
         required:true,
         minLength:1
     },
-    timeStamp: {
+    date: {
         type:Date,
         required:true,
         default: Date.now
+    },
+    month: {
+        type:Month,
+        required:true
     },
     user: {
         type:String,
@@ -34,7 +38,7 @@ const postSchema = new Schema({
         ref: 'Tag',
         default:[]
     },
-    postViews: {
+    views: {
         type:Number,
         required:true,
         default:0

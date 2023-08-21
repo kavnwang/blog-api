@@ -4,6 +4,7 @@ const router = express.Router();
 const post_controller = require("../controllers/postController");
 const comment_controller = require("../controllers/commentController");
 const tag_controller = require("../controllers/tagController");
+const month_controller = require("../controllers/monthController");
 
 
 router.get("/", function(req,res) {
@@ -17,19 +18,13 @@ router.get("/posts/create", post_controller.get_post_create);
 router.post("/posts/create", post_controller.post_post_create);
 
 //view all posts
-router.get("/posts/view/year/:year/month/:month",post_controller.get_post_view_month);
-router.get("/posts/view/year/:year",post_controller.get_post_view_year);
 router.get("/posts/view/recent/:num", post_controller.get_post_view_recent);
 router.get("/posts/view/popular/:num", post_controller.get_post_view_popular);
-router.get("/posts/view/recent/all",post_controller.get_post_view_recent_all);
-router.get("/posts/view/popular/all",post_controller.get_post_view_popular_all);
 router.get("/posts/view/title/:title",post_controller.get_post_view_title);
 router.get("/posts/view/publish/:num", post_controller.get_post_view_publish);
 router.get("/posts/view/unpublish/:num", post_controller.get_post_view_unpublish);
-router.get("/posts/view/publish/all", post_controller.get_post_view_publish_all);
-router.get("/posts/view/unpublish/all", post_controller.get_post_view_unpublish_all);
 
-router.get("/posts/view/:postId", post_controller.post_view_post_id);
+router.get("/posts/view/:postId", post_controller.post_post_view_id);
 
 //Update post
 router.get("/posts/update/:postId", post_controller.get_post_update_id);
@@ -85,4 +80,7 @@ router.post("/posts/:postId/comments/:commentId/delete",comment_controller.post_
 router.get("/posts/:postId/comments/:commentId/delete",comment_controller.get_comment_delete);
 router.post("/posts/:postId/comments/:commentId/delete",comment_controller.post_comment_delete);
 
+//get all months
+router.get("/posts/view/date",month_controller.get_month_list)
+router.get("/posts/year/:year/month/:month",month_controller.get_month_posts);
 module.exports = router;
