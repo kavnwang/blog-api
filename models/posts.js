@@ -9,6 +9,12 @@ const postSchema = new Schema({
         minLength:1,
         default:"Kevin Wang"
     },
+    title: {
+        type:String,
+        required:true,
+        minLength:1,
+        default:""
+    },
     text: {
         type:String,
         required:true,
@@ -20,7 +26,8 @@ const postSchema = new Schema({
         default: Date.now
     },
     month: {
-        type:Month,
+        type:Schema.Types.ObjectId,
+        ref: 'Month',
         //required:true
     },
     comments: {
@@ -48,6 +55,10 @@ const postSchema = new Schema({
         required:true,
         default:false
     }
+});
+
+postSchema.virtual("url").get(function() {
+    return `/posts/${this._id}`;
 });
 
 module.exports = mongoose.model('Post',postSchema);

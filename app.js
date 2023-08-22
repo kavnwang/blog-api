@@ -1,25 +1,42 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require('dotenv');
-const router = require("./routes/api");
 const path = require('path');
+const createError = require('http-errors');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const cors = require('cors');
 
+let corsOptions = {
+  origin: ['http://localhost:5173'],
+  optionsSuccessStatus: 200
+}
 
+const router = require("./routes/api");
 const app = express();
-/*
+
+
 
 app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "pug"); */
+app.set("view engine", "pug"); 
 
-app.use("/", router);
 
 mongoose.set("strictQuery",false);
 const mongoDB = process.env.DB_URL;
 
 main().catch((err) => console.log(err));
 async function main() {
-  await mongoose.connect(mongoDB);
+  await mongoose.connect("mongodb+srv://kavnweng:XRPCwBzRh6pUCQOz@blog.xylnwvi.mongodb.net/?retryWrites=true&w=majority");
 }
+
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.options('*', cors(corsOptions));
+app.use("/", cors(corsOptions),router);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

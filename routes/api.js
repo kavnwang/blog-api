@@ -21,17 +21,16 @@ const asyncHandler = require("express-async-handler");
 router.post("/posts/create", post_controller.post_create);
 
 //view all posts
-router.get("/posts/view/recent/:num", post_controller.posts_get_recent);
-router.get("/posts/view/popular/:num", post_controller.posts_get_popular);
-router.get("/posts/view/title/:title",post_controller.posts_get_title);
-router.get("/posts/view/publish/:num", post_controller.posts_get_publish);
-router.get("/posts/view/unpublish/:num", post_controller.posts_get_unpublish);
-router.get("/posts/view/:postId", post_controller.post_get);
+router.get("/posts/recent/", post_controller.posts_get_recent);
+router.get("/posts/recent/:num/", post_controller.posts_get_recent);
+router.get("/posts/popular/:num", post_controller.posts_get_popular);
+router.get("/posts/title/:title",post_controller.posts_get_title);
+router.get("/posts/publish/:num", post_controller.posts_get_publish);
+router.get("/posts/unpublish/:num", post_controller.posts_get_unpublish);
+router.get("/posts/:postId/", post_controller.post_get);
 
 //Update post
 router.post("/posts/update/:postId", post_controller.post_update);
-router.post("/posts/update/:postId/publish", post_controller.post_publish);
-router.post("/posts/update/:postId/unpublish", post_controller.post_unpublish);
 
 //Delete post
 router.post("/posts/delete/:postId",post_controller.post_delete);
@@ -44,6 +43,8 @@ router.get("/tags/view",tag_controller.get_tags);
 //view posts with a tag
 router.get("/tags/:tag",tag_controller.get_tag);
 
+//view tags with a name
+router.get("/tags/name/:name",tag_controller.get_tag_name);
 //create tag
 router.post("/tags/create",tag_controller.create_tag);
 
@@ -73,6 +74,7 @@ router.post("/posts/:postId/comments/:commentId/delete",comment_controller.comme
 
 
 //get all months
-router.get("/posts/view/months",month_controller.months_get)
+router.get("/posts/months",month_controller.months_get)
 router.get("/posts/year/:year/month/:month",month_controller.month_get);
+
 module.exports = router;
