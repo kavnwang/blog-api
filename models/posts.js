@@ -5,20 +5,18 @@ const Schema = mongoose.Schema;
 const postSchema = new Schema({
     author: {
         type:String,
-        required:true,
-        minLength:1,
-        default:"Kevin Wang"
+        default:""
     },
     title: {
         type:String,
-        required:true,
-        minLength:1,
         default:""
+    },
+    subtitle: {
+        type:String
     },
     text: {
         type:String,
-        required:true,
-        minLength:1
+        default: ""
     },
     date: {
         type:Date,

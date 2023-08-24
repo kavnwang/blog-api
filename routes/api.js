@@ -21,19 +21,25 @@ const asyncHandler = require("express-async-handler");
 router.post("/posts/create", post_controller.post_create);
 
 //view all posts
-router.get("/posts/recent/", post_controller.posts_get_recent);
 router.get("/posts/recent/:num/", post_controller.posts_get_recent);
+router.get("/posts/recent/", post_controller.posts_get_recent);
 router.get("/posts/popular/:num", post_controller.posts_get_popular);
+router.get("/posts/popular", post_controller.posts_get_popular);
+
 router.get("/posts/title/:title",post_controller.posts_get_title);
 router.get("/posts/publish/:num", post_controller.posts_get_publish);
+router.get("/posts/publish", post_controller.posts_get_publish);
+
 router.get("/posts/unpublish/:num", post_controller.posts_get_unpublish);
-router.get("/posts/:postId/", post_controller.post_get);
+router.get("/posts/unpublish", post_controller.posts_get_unpublish);
 
 //Update post
 router.post("/posts/update/:postId", post_controller.post_update);
 
 //Delete post
 router.post("/posts/delete/:postId",post_controller.post_delete);
+
+router.get("/posts/:postId/", post_controller.post_get);
 
 //Tags
 
@@ -58,7 +64,7 @@ router.post("/tags/update/:tag",tag_controller.update_tag);
 //comments
 
 //get comment
-router.get("/posts/:postId/comments/:commentId",comment_controller.comment_get);
+router.get("/comments/:commentId",comment_controller.comment_get);
 
 //get all comments
 router.get("/posts/:postId/comments",comment_controller.comments_get);

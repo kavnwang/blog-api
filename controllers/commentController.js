@@ -22,41 +22,51 @@ exports.comment_get = asyncHandler(async(req,res,next) => {
         comment: getComment,
         success:true
     })
-    
-    console.log(res.json);
 
 });
 
 //get all comments
 exports.comments_get = asyncHandler(async(req,res,next) => {
-    const getComments = await Post.findById(req.params.postId, "comments")
-        .sort({date: 1})
+    const getPost = await Post.findById(req.params.postId)
         .exec();
     
-    if(getComments === null) {
+    if(getPost === null) {
         const err = new Error("Post not found");
         err.status = 404;
         return next(err);
     }
+
+    const getComments = await Post.findById(req.params.postId,"comments")
+        .sort({date: -1}) 
+        .populate()
+        .exec();
     
     res.json({
         comments: getComments,
         success:true
     })
-    console.log(res.json);
-
 });
 
 //create comment
 exports.comment_create = asyncHandler(async(req,res,next) => {
+    const getPost = await Post.findById(req.body.postId)
+        .exec();
+    
+    if(getPost === null) {
+        const err = new Error("Post not found");
+        err.status = 404;
+        return next(err);
+    }
     const comment = new Comment({
-        post: req.body.postId,
+        postId: req.body.postId,
+        author: req.body.author,
         comment: req.body.comment,
     })
-    await Comment.save();
 
-    res.redirect(post.url);
-    console.log(res.json);
+    await comment.save();
+    const newComments = getPost.comments;
+    newComments.push(comment);
+    await Post.findByIdAndUpdate(req.body.postId,{comments: newComments },{});
 
 });
 
@@ -72,7 +82,7 @@ exports.comment_update = asyncHandler(async(req,res,next) => {
     await Comment.findByIdAndUpdate(req.params.id,comment,{});
 });
 
-//delete comment
+//THIS DOES NOT WORK
 exports.comment_delete = asyncHandler(async(req,res,next) => {
-    await Post.findByIdAndDelete(req.body._id);
+    await Comment.findByIdAndDelete(req.params.commentId);
 });

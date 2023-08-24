@@ -10,7 +10,6 @@ exports.months_get = asyncHandler(async(req,res,next) => {
     const monthList = await Month.find({})
         .sort({date: -1})
         .exec();
-
     
         res.json({
             months:monthList,

@@ -23,7 +23,7 @@ const imageSchema = new Schema({
     post: {
         type: Schema.Types.ObjectId, 
         ref: 'Post'
-    }
+    } 
 });
 
 module.exports = mongoose.model('Image',imageSchema);
