@@ -33,7 +33,7 @@ exports.posts_get_recent = asyncHandler(async(req,res,next) => {
     if(req.params.num === null) {
         numDocuments = Post.countDocuments();
     }
-    const postList = await Post.find({})
+    const postList = await Post.find({publish:true})
     .sort({date: -1})
     .limit(numDocuments)
     .exec();
@@ -49,7 +49,7 @@ exports.posts_get_popular = asyncHandler(async(req,res,next) => {
         numDocuments = Post.countDocuments();
     }
 
-    const postList = await Post.find({})
+    const postList = await Post.find({publish:true})
     .sort({views: -1})
     .limit(numDocuments)
     .exec();
@@ -117,13 +117,14 @@ exports.post_get = asyncHandler(async(req,res,next) => {
     .populate()
     .exec();
 
-
+    
     if(getPost === null) {
         const err = new Error("Post not found");
         err.status = 404;
         return next(err);
     }
-    console.log(getPost.tags);
+    const numViews = getPost.views;
+    await Post.findByIdAndUpdate(req.params.postId,{views:numViews+1});
     res.json({
         post:getPost,
         success:true

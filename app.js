@@ -1,4 +1,4 @@
-const express = require("express");
+const express = require('express');
 const mongoose = require("mongoose");
 const dotenv = require('dotenv').config();
 const path = require('path');
@@ -8,7 +8,7 @@ const logger = require('morgan');
 const cors = require('cors');
 
 let corsOptions = {
-  origin: [process.env.REQ_URL],
+  origin: '*',
   optionsSuccessStatus: 200
 }
 
