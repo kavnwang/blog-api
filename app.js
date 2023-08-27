@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const dotenv = require('dotenv');
+const dotenv = require('dotenv').config();
 const path = require('path');
 const createError = require('http-errors');
 const cookieParser = require('cookie-parser');
@@ -23,10 +23,9 @@ app.set("view engine", "pug");
 
 mongoose.set("strictQuery",false);
 const mongoDB = process.env.DB_URL;
-
 main().catch((err) => console.log(err));
 async function main() {
-  await mongoose.connect("mongodb+srv://kavnweng:XRPCwBzRh6pUCQOz@blog.xylnwvi.mongodb.net/?retryWrites=true&w=majority");
+  await mongoose.connect(mongoDB);
 }
 
 app.use(logger('dev'));

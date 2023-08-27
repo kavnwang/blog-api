@@ -117,12 +117,13 @@ exports.post_get = asyncHandler(async(req,res,next) => {
     .populate()
     .exec();
 
+
     if(getPost === null) {
         const err = new Error("Post not found");
         err.status = 404;
         return next(err);
     }
-
+    console.log(getPost.tags);
     res.json({
         post:getPost,
         success:true
@@ -131,28 +132,66 @@ exports.post_get = asyncHandler(async(req,res,next) => {
 });
 
 //Update post
-exports.post_update = asyncHandler(async(req,res,next) => {
+exports.post_update = asyncHandler(async (req, res, next) => {
+    try {
 
-    console.log(req.body);
-    const getPost = await Post.findById(req.params.postId)
-    .exec();
-
-
-    if(getPost === null) {
+        if(req.body.tags != null) {
+                  // Create an array of promises for Tag.find()
+      const tagPromises = req.body.tags.map(async (tagName) => {
+        const tag = await Tag.findOne({ name: tagName }).limit(1).exec();
+        return tag;
+      });
+  
+      // Wait for all promises to resolve using Promise.all
+      const resolvedTags = await Promise.all(tagPromises);
+      // Update newBody with resolved tags
+      const newBody = { ...req.body, tags: resolvedTags };
+  
+      // Update the Post
+      const updatedPost = await Post.findByIdAndUpdate(
+        req.params.postId,
+        newBody,
+        {}
+      ).exec();
+      if (!updatedPost) {
         const err = new Error("Post not found");
         err.status = 404;
         return next(err);
-    }
+      }
+  
+      res.json({ post: updatedPost });
 
-    const updatedPost = await Post.findByIdAndUpdate(req.params.postId,req.body,{});
 
-    res.json({post: updatedPost});
-});
+        } else {
+            const newBody = { ...req.body};
+  
+            // Update the Post
+            const updatedPost = await Post.findByIdAndUpdate(
+              req.params.postId,
+              newBody,
+              {}
+            ).exec();
+            if (!updatedPost) {
+              const err = new Error("Post not found");
+              err.status = 404;
+              return next(err);
+            }
+        
+            res.json({ post: updatedPost });
+        }
+  
+    } catch (err) {
+        // Handle errors here
+        next(err);
+      }
 
+      
+  });
+  
 //Delete post
 
 
 exports.post_delete = asyncHandler(async(req,res,next) => {
-    console.log(req.params.postId);
     await Post.findByIdAndDelete(req.params.postId);
 });
+

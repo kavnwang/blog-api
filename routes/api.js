@@ -54,6 +54,9 @@ router.get("/tags/name/:name",tag_controller.get_tag_name);
 //create tag
 router.post("/tags/create",tag_controller.create_tag);
 
+//add post to tag
+router.post("/tags/:tag/add/:post",tag_controller.add_post_tag);
+
 //delete tag
 router.post("/tags/delete/:tag",tag_controller.delete_tag);
 

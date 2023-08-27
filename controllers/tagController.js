@@ -37,12 +37,27 @@ exports.get_tags = asyncHandler(async(req,res,next) => {
 });
 
 exports.get_tag_name = asyncHandler(async(req,res,next) => {
-    const tagList = await Tag.find({name: req.params.name})
-    .sort({name: 1})
+    const tagList = await Tag.findOne({name: req.params.name})
+    .populate()
     .exec();
 
     res.json({
         tags:tagList,
+        success:true
+    });
+});
+
+exports.add_post_tag = asyncHandler(async(req,res,next) => {
+    const tag = await Tag.findById(req.params.tag)
+    .populate()
+    .exec();
+    const newPosts = [];
+    tag.posts.forEach(function(u) {
+        newPosts.push(u);
+    });
+    newPosts.push(await Post.findById(req.params.post));
+    await Tag.findByIdAndUpdate(req.params.tag,{posts: newPosts});
+    res.json({
         success:true
     });
 });
@@ -52,7 +67,6 @@ exports.get_tag_name = asyncHandler(async(req,res,next) => {
 exports.create_tag = asyncHandler(async(req,res,next) => {
     const newTag = new Tag({
         name: req.body.name,
-        color: req.body.color,
         posts: []
     });
     await newTag.save();
@@ -65,16 +79,43 @@ exports.create_tag = asyncHandler(async(req,res,next) => {
 //delete tag
 
 exports.delete_tag = asyncHandler(async(req,res,next) => {
-    await Tag.findByIdAndDelete(req.body._id);
+    const getTag = await Tag.findById(req.params.tag)
+    .populate()
+    .exec();
+
+
+    if(getTag === null) {
+        const err = new Error("Tag not found");
+        err.status = 404;
+        return next(err);
+    }
+    getTag.posts.forEach(function(u) {
+        const removeTag = [];
+        for(let i = 0;i < u.tags.length;i++) {
+            if(u.tags[i] != getTag) {
+                removeTag.push(u.tags[i]);
+            }
+        }
+        Post.findByIdAndUpdate(u,{tags: removeTag});
+    });
+
+    await Tag.findByIdAndDelete(req.params.tag);
 });
 
 //edit tag
 exports.update_tag = asyncHandler(async(req,res,next) => {
-    const tag = new Tag({
-        name: req.body.name,
-        color: req.body.color,
-        posts: req.body.posts,
-        _id: req.body._id,
-    }); 
-    await Tag.findByIdAndUpdate(req.body._id);
+    const getTag = await Tag.findById(req.params.tag)
+    .exec();
+
+
+    if(getTag === null) {
+        const err = new Error("Tag not found");
+        err.status = 404;
+        return next(err);
+    }
+
+    const updatedTag = await Tag.findByIdAndUpdate(req.params.tag,{name: req.body.name},{});
+
+    res.json({tag: updatedTag});
+
 });
