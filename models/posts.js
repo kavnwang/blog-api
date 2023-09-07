@@ -15,8 +15,7 @@ const postSchema = new Schema({
         type:String
     },
     text: {
-        type:String,
-        default: ""
+        
     },
     date: {
         type:Date,
