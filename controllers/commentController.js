@@ -67,7 +67,10 @@ exports.comment_create = asyncHandler(async(req,res,next) => {
     const newComments = getPost.comments;
     newComments.push(comment);
     await Post.findByIdAndUpdate(req.body.postId,{comments: newComments },{});
-
+    res.json({
+        comments: newComments,
+        success:true
+    })
 });
 
 //update comment
