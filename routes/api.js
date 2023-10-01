@@ -5,6 +5,7 @@ const post_controller = require("../controllers/postController");
 const comment_controller = require("../controllers/commentController");
 const tag_controller = require("../controllers/tagController");
 const month_controller = require("../controllers/monthController");
+const photo_controller = require("../controllers/photoController");
 
 //need month create, add tags
 
@@ -85,5 +86,11 @@ router.post("/posts/:postId/comments/:commentId/delete",comment_controller.comme
 //get all months
 router.get("/posts/months",month_controller.months_get)
 router.get("/posts/year/:year/month/:month",month_controller.month_get);
+
+//Photos
+
+router.post("/photos/create", photo_controller.photo_add);
+router.get("/photos/", photo_controller.photo_get_all);
+
 
 module.exports = router;
